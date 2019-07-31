@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="engine\game.c" open="1" top="0" tabpos="1">
+		<Cursor position="339" topLine="0" />
+	</File>
+	<File name="engine\game.h" open="0" top="0" tabpos="10">
+		<Cursor position="106" topLine="0" />
+	</File>
+	<File name="engine\init_game.c" open="0" top="0" tabpos="9">
+		<Cursor position="765" topLine="0" />
+	</File>
+	<File name="engine\init_game.h" open="0" top="0" tabpos="8">
+		<Cursor position="148" topLine="0" />
+	</File>
+	<File name="engine\title.c" open="0" top="0" tabpos="11">
+		<Cursor position="1366" topLine="15" />
+	</File>
+	<File name="engine\title.h" open="0" top="0" tabpos="3">
+		<Cursor position="181" topLine="0" />
+	</File>
+	<File name="gfx\uncompressed_gfx.c" open="0" top="0" tabpos="12">
+		<Cursor position="69340" topLine="208" />
+	</File>
+	<File name="gfx\uncompressed_gfx.h" open="0" top="0" tabpos="7">
+		<Cursor position="769" topLine="0" />
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="2">
+		<Cursor position="885" topLine="0" />
+	</File>
+	<File name="main.h" open="0" top="0" tabpos="6">
+		<Cursor position="363" topLine="0" />
+	</File>
+	<File name="makefile.gen" open="0" top="0" tabpos="3">
+		<Cursor position="425" topLine="0" />
+	</File>
+	<File name="minilib\crt0.s" open="0" top="0" tabpos="0">
+		<Cursor position="3273" topLine="0" />
+	</File>
+	<File name="minilib\hw_md.s" open="0" top="0" tabpos="0">
+		<Cursor position="12768" topLine="261" />
+	</File>
+	<File name="minilib\mini_lib.c" open="1" top="0" tabpos="6">
+		<Cursor position="49818" topLine="1466" />
+	</File>
+	<File name="minilib\mini_lib.h" open="1" top="0" tabpos="5">
+		<Cursor position="2155" topLine="44" />
+	</File>
+	<File name="minilib\qr.c" open="0" top="0" tabpos="8">
+		<Cursor position="32456" topLine="661" />
+	</File>
+	<File name="minilib\qr.h" open="0" top="0" tabpos="7">
+		<Cursor position="291" topLine="0" />
+	</File>
+	<File name="minilib\raster.s" open="0" top="0" tabpos="0">
+		<Cursor position="366" topLine="0" />
+	</File>
+	<File name="minilib\sram_a.s" open="0" top="0" tabpos="11">
+		<Cursor position="489" topLine="0" />
+	</File>
+	<File name="minilib\sram_control.c" open="0" top="0" tabpos="8">
+		<Cursor position="24" topLine="0" />
+	</File>
+	<File name="minilib\sram_control.h" open="0" top="0" tabpos="10">
+		<Cursor position="1574" topLine="62" />
+	</File>
+	<File name="snd\sound.c" open="1" top="1" tabpos="4">
+		<Cursor position="92" topLine="179" />
+	</File>
+	<File name="snd\sound.h" open="1" top="0" tabpos="3">
+		<Cursor position="1467" topLine="13" />
+	</File>
+</CodeBlocks_layout_file>

@@ -1,0 +1,2 @@
+rescomp tracks.res
+pause

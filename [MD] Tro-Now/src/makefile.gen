@@ -1,0 +1,145 @@
+ifdef $(GENDEV)
+ROOTDIR = $(GENDEV)
+else
+ROOTDIR = C:/dev/copy/megadrive/minilib
+endif
+
+CC= $(ROOTDIR)/bin/gcc
+OBJC= $(ROOTDIR)/bin/objcopy
+ASMZ80= $(ROOTDIR)/bin/sjasm
+BINTOC= $(ROOTDIR)/bin/bintoc
+BINTOS= $(ROOTDIR)/bin/bintos
+SIZEBND= $(ROOTDIR)/bin/sizebnd
+FFMPEG= $(ROOTDIR)/bin/ffmpeg
+
+#OPTION=
+
+SRC_C= $(wildcard *.c)
+SRC_S= $(wildcard *.s)
+SRC_S80= $(wildcard *.s80)
+
+OBJ= $(SRC_SZ80:.s80=.o)
+OBJ+= $(SRC_C:.c=.o)
+OBJ+= $(SRC_S:.s=.o)
+OBJ+= $(SRC_S80:.s80=.o)
+
+LINKOBJ= crt0.o hw_md.o appack.o kos.o cd.o mini_lib.o uncompressed_gfx.o init_game.o smp_null.o sound.o tracks.o z80_xgm.o game.o title.o qr.o sram_a.o sram_control.o raster.o main.o
+
+INCS=
+FLAGS= $(OPTION) -m68000 -Wall -O2 -fomit-frame-pointer -fno-builtin-memset -fno-builtin-memcpy $(INCS)
+FLAGSZ80= -i$(SRC) -i$(INCLUDE)
+
+all: rom.bin
+
+
+rom.bin: rom.out
+	$(OBJC) --pad-to 65536 -O binary rom.out rom.bin
+	$(SIZEBND) rom.bin -sizealign 65536
+
+rom.out: $(OBJ) data_minilib gfx snd engine
+	$(CC) -T $(ROOTDIR)/md.ld -nostdlib $(LINKOBJ) $(ROOTDIR)/lib/libgcc.a -o rom.out
+
+
+
+
+#########################################
+# MINILIBS
+#########################################
+data_minilib: hw_md.o crt0.o appack.o qr.o mini_lib.o sram_a.o sram_control.o raster.o kos.o cd.o
+
+hw_md.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/hw_md.s -o hw_md.o
+
+crt0.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/crt0.s -o crt0.o
+
+appack.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/appack.s -o appack.o
+
+qr.o: force_look
+		$(CC) $(FLAGS) -c ./minilib/qr.c -o qr.o
+
+mini_lib.o: force_look
+		$(CC) $(FLAGS) -c ./minilib/mini_lib.c -o mini_lib.o
+
+sram_a.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/sram_a.s -o sram_a.o
+
+sram_control.o: force_look
+		$(CC) $(FLAGS) -c ./minilib/sram_control.c -o sram_control.o
+
+raster.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/raster.s -o raster.o
+
+kos.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/kos.s -o kos.o
+
+cd.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./minilib/cd.s -o cd.o
+
+#########################################
+# GFX
+#########################################
+gfx: uncompressed_gfx.o
+
+uncompressed_gfx.o: force_look
+		$(CC) $(FLAGS) -c ./gfx/uncompressed_gfx.c -o uncompressed_gfx.o
+
+
+#########################################
+# SND
+#########################################
+snd: sound.o z80_xgm.o80 z80_xgm.s z80_xgm.o smp_null.o tracks.o
+
+sound.o: force_look
+		$(CC) $(FLAGS) -c ./snd/sound.c -o sound.o
+
+z80_xgm.o80: force_look
+		$(ASMZ80) $(FLAGSZ80) ./snd/z80_xgm.s80 z80_xgm.o80 out.lst 
+
+z80_xgm.s: force_look
+		$(BINTOS) z80_xgm.o80 
+
+z80_xgm.o: force_look
+		$(AS) -m68000 --register-prefix-optional z80_xgm.s -o z80_xgm.o
+
+smp_null.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./snd/smp_null.s -o smp_null.o
+
+tracks.o: force_look
+		$(AS) -m68000 --register-prefix-optional ./snd/xgm/tracks.s -o tracks.o		
+
+#########################################
+# ENGINE
+#########################################
+engine: init_game.o game.o title.o
+
+init_game.o: force_look
+		$(CC) $(FLAGS) -c ./engine/init_game.c -o init_game.o 
+
+game.o: force_look
+		$(CC) $(FLAGS) -c ./engine/game.c -o game.o
+
+title.o: force_look
+		$(CC) $(FLAGS) -c ./engine/title.c -o title.o
+
+
+#################################################################
+
+%.o80: %.s80
+	$(ASMZ80) $(FLAGSZ80) $< $@ out.lst
+
+%.s: %.o80
+	$(BINTOS) $<
+
+%.o: %.c
+	$(CC) $(FLAGS) -c $< -o $@
+
+%.o: %.s
+	$(CC) $(FLAGS) -c $< -o $@
+
+%.o: %.s
+	$(AS) -m68000 --register-prefix-optional $< -o $@
+
+force_look :
+

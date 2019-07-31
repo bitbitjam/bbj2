@@ -1,0 +1,6 @@
+
+
+- limpiar gameloop de el postgame
+- sonido wav
+- items
+- mas arenas

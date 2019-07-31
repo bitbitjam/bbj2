@@ -1,0 +1,183 @@
+#!/bin/bash
+
+IMG2CPC=${CPCT_PATH}/tools/img2cpc/Img2CPC.exe
+WINE_UNIT=z:
+TILES_DIR="$1"
+TILES_PREFIX="$2"
+TILES_SUFIX=png
+TILES_WIDTH=4
+TILES_HEIGHT=4
+
+function name_wo_ext() {
+   echo "${1%.*}"
+}
+
+function main() {
+   local H_FILE
+   local C_FILE
+
+   echo "Converting tiles to code using Img2CPC..."
+
+   cd ${TILES_DIR}
+   TILES_IMG_FILES=( ${TILES_PREFIX}*${TILES_SUFIX} )
+   for FILE in ${TILES_IMG_FILES[@]}; do
+      ## Pass img2cpc to convert to ASM
+      OUTPUT_FILE=${FILE}.h
+      BASENAME=g_$(name_wo_ext $FILE)_t
+      wine ${IMG2CPC} /w=${TILES_WIDTH} /h=${TILES_HEIGHT} /o=${OUTPUT_FILE} /bn=${BASENAME} "${FILE}"
+
+      ## Convert ASM to C
+      H_FILE=$(name_wo_ext $FILE).h 
+      C_FILE=$(name_wo_ext $FILE).c
+      create_h_file_header "$H_FILE" "$FILE"
+      create_c_file_header "$C_FILE" "$FILE"
+      asm2c "$OUTPUT_FILE" "$H_FILE" "$C_FILE"
+   done
+   cd -
+}
+
+function asm2c() {
+   local IN_FILE="$1"
+   local H_FILE="$2"
+   local C_FILE="$3"
+   local STATUS=comments
+   local NUMTILES
+   local TOKENS
+   local TOK
+
+   while read LINE; do
+      # Tokenize LINE
+      TOKENS=( $LINE )
+
+      # Analize depending on STATUS
+      case ${STATUS} in
+         comments)
+            if [[ "${TOKENS[0]}" == "extern" ]]; then
+               STATUS=definitions
+               processDefinition TOKENS[@] >> ${H_FILE}
+               NUMTILES=1
+            fi
+         ;;
+         definitions)
+            if [[ "${TOKENS[0]}" == "extern" ]]; then
+               processDefinition TOKENS[@] >> ${H_FILE}
+               NUMTILES=$((NUMTILES + 1))
+            elif [[ "${TOKENS[0]}" == "unsigned" ]]; then
+               echo "extern const u8* const g_tileset [$NUMTILES];" >> ${H_FILE}
+               echo "const u8* const g_tileset [$NUMTILES] = {" >> ${C_FILE}
+               STATUS=tilearray_data
+            else
+               echo "ERROR! 'unsigned char* tiles' declaration expected after extern definitions"
+               exit 1
+            fi
+         ;;
+         tilearray_data)
+            if [[ "${TOKENS[0]}" != "};" ]]; then
+               echo "   "${TOKENS[@]//_DATA/} >> ${C_FILE}
+            else
+               echo "};" >> ${C_FILE}
+               echo >> ${C_FILE}
+               STATUS=asm
+            fi           
+         ;;
+         asm)
+            TOK="${TOKENS[0]##*_D}"
+            TOK="${TOK:0:3}"
+            if [[ ${TOK} == "ATA" ]]; then
+               TOK="${TOKENS[0]//_DATA*/}"
+               TOK="${TOK#._}"
+               NUMTILES=$((TILES_WIDTH / 2))
+               echo "const u8 ${TOK}[${NUMTILES}*${TILES_HEIGHT}] = {" >> $C_FILE
+               TOK=""
+               STATUS=asm_data
+            fi
+         ;;
+         asm_data)
+            if [[ "${TOKENS[0]}" == "defb" ]]; then
+               # Print previous tokens with comma at the end
+               if [[ "$TOK" != "" ]]; then
+                  printf "   %s,\n" "${TOK}" >> "$C_FILE"
+               fi
+
+               # Clean tokens
+               for ((i=1; i < ${#TOKENS[@]}; i++)); do
+                  TOK=$(echo "${TOKENS[i]}" | sed 's/[^$0-9A-Fa-fx,]*//g')
+                  if [[ ${TOK:0:1} == "$" ]]; then
+                     if [[ ${#TOK} < 3 || ${TOK:2:1} =~ [^0-9A-Fa-f] ]]; then
+                        TOK="${TOK:0:1}0${TOK:1}"
+                     fi
+                  fi
+                  TOKENS[i]=${TOK//$/0x}
+               done
+               TOK=${TOKENS[@]:1}
+            else
+               # Print previous tokens with comma at the end
+               if [[ "$TOK" != "" ]]; then
+                  printf "   %s\n" "${TOK}" >> "$C_FILE"
+                  printf "};\n\n" >> "$C_FILE"
+               fi
+               STATUS=asm
+            fi           
+         ;;
+      esac
+   done < $IN_FILE
+}
+
+function processDefinition() {
+   local LINE
+   local BYTESWIDTH=$((TILES_WIDTH / 2))
+   declare -a LINE=("${!1}")
+
+   echo "extern const u8 ${LINE[3]/_DATA[]/[${BYTESWIDTH}*${TILES_HEIGHT}]}"
+}
+
+function create_h_file_header() {
+   local H_FILE=$1
+   local GENFILE=$2
+
+cat > $H_FILE <<- END_OF_HEADER
+// 
+// Tiles generated from file ${GENFILE}
+//
+END_OF_HEADER
+}
+
+function create_c_file_header() {
+   local C_FILE=$1
+   local GENFILE=$2
+
+cat > $C_FILE <<- END_OF_HEADER
+// 
+// Tile definitions generated from file ${GENFILE}
+//
+END_OF_HEADER
+
+}
+
+function usage() {
+   echo "Usage: "
+   echo "   $(basename $0) <tiles_dir> <tilefile_prefix>"
+   echo
+   echo "   Looks for tile files in the tiles_dir folder and converts"
+   echo "then  to C. Files must be named <tilefile_prefix>*.png to be "
+   echo "detected and converted."
+   echo
+   exit 2
+}
+
+if (( $# != 2 )); then
+   usage $@
+fi
+
+if [ ! -d "$TILES_DIR" ]; then
+   echo "ERROR! ($TILES_DIR) is not a directory!";
+   exit 1
+fi
+
+NUMFILES=$(ls -l ${TILES_DIR}/${TILES_PREFIX}*png 2> /dev/null | wc -l )
+if (( NUMFILES == 0 )); then
+   echo "ERROR! No files named (${TILES_PREFIX}*png) in folder ($TILES_DIR)"
+   exit 2
+fi
+
+main

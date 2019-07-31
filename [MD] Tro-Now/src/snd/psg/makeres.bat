@@ -1,0 +1,4 @@
+
+
+vgmpsgfx sfxbank.vgm
+pause

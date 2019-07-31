@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="4" tileheight="4" nextobjectid="1">
+ <tileset firstgid="1" name="set1" tilewidth="4" tileheight="4">
+  <image source="../tiles/set1.png" width="64" height="64"/>
+ </tileset>
+ <layer name="Capa de Patrones 1" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlksSgjAMhuvWjd7Avd5AT4+4VUDcKtxAb6DpSGc6mSZNsAgLmPmm6Ss/DWnL2cCzkNNCsSFolL4uULwYf0Ow9ewn0l8n1lpF+rE+fj/LrufaJO8V0o+hjdFBuX5LBhyBHDgh2/XhMTlqw/0a/Qq4AnWHb7s+PKZGbb59U+o7lh2xOEq/O86lkP6SIOW+kKz/F20uVpS+dI4Wbh1OP5TT2PbrlFZoPufH6rcmnNPYdnVurfvAfMqPrTcDxTwlsTN8TH/uW44VG0lOzPCUht/32JbmROgMwPu/MN/zh9v3IZvSps4Qv/T7+/x/pGTWn6a+9B7MhG3UvSn5/+Pur0rYRu2bqcZ/1v+f/h14KygZf4XS1wP4AKpnMgM=
+  </data>
+ </layer>
+</map>

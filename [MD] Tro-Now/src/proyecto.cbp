@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="proyecto" />
+		<Option makefile="c:/megadrive/sdk/BM_project/makefile.gen" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\proyecto" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="sega_genesis_compiler" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="engine\game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="engine\game.h" />
+		<Unit filename="engine\init_game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="engine\init_game.h" />
+		<Unit filename="engine\title.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="engine\title.h" />
+		<Unit filename="gfx\uncompressed_gfx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gfx\uncompressed_gfx.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.h" />
+		<Unit filename="makefile.gen" />
+		<Unit filename="minilib\appack.s" />
+		<Unit filename="minilib\crt0.s" />
+		<Unit filename="minilib\hw_md.s" />
+		<Unit filename="minilib\mini_lib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="minilib\mini_lib.h" />
+		<Unit filename="minilib\qr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="minilib\qr.h" />
+		<Unit filename="minilib\raster.s" />
+		<Unit filename="minilib\sram_a.s" />
+		<Unit filename="minilib\sram_control.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="minilib\sram_control.h" />
+		<Unit filename="snd\sound.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="snd\sound.h" />
+		<Unit filename="snd\vgm_drv.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
