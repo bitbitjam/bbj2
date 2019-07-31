@@ -76,3 +76,37 @@ The eternal conflict between good and evil, defeat the darkness!
 
 ### [Check entry and source code](/[ZX]%20Anima/)
 
+## Last Crown - Light Games (Game Boy)
+
+![title](/[GB]%20Last%20Crown/title.png?raw=true) ![ingame](/[GB]%20Last%20Crown/ingame.png?raw=true) 
+
+You're the last soldier of your army and you must defeat the evil army of Ffohlessah. With your marvellous valirian sword, you have to recover the crown to conquer the earth.
+
+### [Check entry and source code](/[GB]%20Last%20Crown/)
+
+## Gertrudis, THE SOLDIER - Fierce Five (ZX Spectrum 48K)
+
+![title](/[ZX]%20Gertrudis%20THE%20SOLDIER/ingame1.png?raw=true) ![ingame](/[ZX]%20Gertrudis%20THE%20SOLDIER/ingame2.png?raw=true) 
+
+Get gertrudis and explore his little world.
+
+### [Check entry and source code](/[ZX]%20Gertrudis%20THE%20SOLDIER/)
+
+
+# Final Classification
+
+## Best Confronted Kingdoms Game
+
+   1. Anima – Les Quizarables (ZX Spectrum)
+   2. Last Crown – Light Games (Game Boy)
+
+## Best platform use
+
+   1. Black Star – usebox (ZX Spectrum)
+   2.  ZRealms: 80bc – Cheesetea (Amstrad CPC)
+
+## Funniest Game
+
+   1. Tro-Now – Pixel Bastards South! (Megadrive / Genesis)
+   2. The Legend of Bocatapuesto – Xtremely Xplicit (ZX Spectrum)
+
